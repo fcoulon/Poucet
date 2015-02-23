@@ -1,5 +1,7 @@
 package main;
 
+import html.HtmlGenerator;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cfg.CfgBuilder;
+import cfg.ControlFlowGraph;
 import spoon.compiler.SpoonCompiler;
 import spoon.processing.AbstractProcessor;
 import spoon.processing.ProcessingManager;
@@ -22,6 +25,13 @@ import spoon.support.compiler.jdt.JDTBasedSpoonCompiler;
 public class Main {
 	public static void main(String[] args) {
 		
+		final List<ControlFlowGraph> methods = new ArrayList<ControlFlowGraph>();
+		
+		/*
+		 * Spoon processs
+		 */
+		//Setup the factory
+		StandardEnvironment env = new StandardEnvironment();
 		try {
 			System.out.println("Loading...");
 			//Locate libraries
@@ -29,8 +39,8 @@ public class Main {
 			ClassLoader libLoader = new URLClassLoader(getDependencies(getClasspath(args[1])), Thread.currentThread().getContextClassLoader());
 			Thread.currentThread().setContextClassLoader(libLoader);
 			
-			//Setup the factory
-			StandardEnvironment env = new StandardEnvironment();
+//			Setup the factory
+//			StandardEnvironment env = new StandardEnvironment();
 //			env.setVerbose(true);
 //	        env.setDebug(true);
 			DefaultCoreFactory f = new DefaultCoreFactory();
@@ -53,8 +63,7 @@ public class Main {
 			processorManager.addProcessor(new AbstractProcessor<CtExecutable>() {
 				@Override
 				public void process(CtExecutable method) {
-					
-					System.out.println(method.getSignature());
+					methods.add(new ControlFlowGraph(method));
 				}
 			});
 			processorManager.process();
@@ -63,6 +72,12 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		/*
+		 * Build html pages
+		 */
+		System.out.println("Building html...");
+		HtmlGenerator.build(methods, env, "Output");
+		System.out.println("Html done");
 	}
 
 	//TODO: improve this

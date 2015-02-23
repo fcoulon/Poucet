@@ -1,5 +1,6 @@
 package html;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -9,10 +10,12 @@ import cfg.Connector;
 import cfg.ControlFlowGraph;
 import cfg.MyPrinter;
 import spoon.compiler.Environment;
+import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtMethod;
+import spoon.reflect.declaration.CtSimpleType;
 
 public class HtmlGenerator {
-private void genHmtlPages(String fileName, CtMethod method, ControlFlowGraph ctrlFlowGraph, Environment environment, String outputFolder){ //TODO: clean this function
+private static void genHmtlPages(String fileName, CtExecutable method, ControlFlowGraph ctrlFlowGraph, Environment environment, String outputFolder){ //TODO: clean this function
 		
 		String scriptHead = "<head><script src=\"lib/svg-pan-zoom.min.js\"></script></head>";
 		String script = "    <script>"+
@@ -98,7 +101,7 @@ private void genHmtlPages(String fileName, CtMethod method, ControlFlowGraph ctr
 		
 	}
 	
-	private void genHtmlIndex(List<String> methodsIndex, String outputFolder){
+	private static void genHtmlIndex(List<String> methodsIndex, String outputFolder){
 		
 		StringBuffer methods = new StringBuffer();
 		Collections.sort(methodsIndex, new Comparator<String>() {
@@ -154,5 +157,28 @@ private void genHmtlPages(String fileName, CtMethod method, ControlFlowGraph ctr
 		
 		ControlFlowGraph.writeFile(outputFolder+"/html/", "methodIndex.html", methodIndex.toString());
 		ControlFlowGraph.writeFile(outputFolder, "index.html", index.toString());
+	}
+	
+	public static void build(List<ControlFlowGraph> cfgs, Environment environment, String outputFolder){
+		List<String> methodsIndex = new ArrayList<String>();
+		int ID = 0;
+		
+		for(ControlFlowGraph cfg : cfgs){
+			CtExecutable method = cfg.getExecutable();
+			CtSimpleType<?> clazz = method.getDeclaringType();
+			
+			String methodID = clazz.getQualifiedName() + "." + method.getSimpleName();
+			if(methodsIndex.contains(methodID)){ //check if the name is already registered
+				methodID = methodID + "@" + ID;
+				ID++;
+			}
+			methodsIndex.add(methodID);
+			
+			genHmtlPages(methodID, cfg.getExecutable(), cfg, environment, outputFolder);
+			
+			cfg.writeDotGraph(outputFolder+"/html/dotFolder/", methodID);
+		}
+		
+		genHtmlIndex(methodsIndex, outputFolder);
 	}
 }
