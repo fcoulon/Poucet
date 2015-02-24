@@ -43,6 +43,7 @@ public class Main {
 //			StandardEnvironment env = new StandardEnvironment();
 //			env.setVerbose(true);
 //	        env.setDebug(true);
+			env.setAutoImports(true);
 			DefaultCoreFactory f = new DefaultCoreFactory();
 	        Factory factory = new FactoryImpl(f, env);
 	        CfgBuilder.factory = factory;

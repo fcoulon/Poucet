@@ -3,6 +3,7 @@ package cfg;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,24 @@ public class ControlFlowGraph {
 		
 		writeFile(outFolder,fileName+".dot",fileContent.toString());
 		System.out.println("CFG saved in " + outFolder + "/" + fileName);
+	}
+	
+	/**
+	 * Write the cfg in .svg format in the file 'outFolder'/'filename'
+	 */
+	public void writeSvgGraph(String inputFile, String outPutFile){
+		
+		Runtime runtime = Runtime.getRuntime();
+        Process p;
+		try {
+			p = runtime.exec("dot -Tsvg "+ inputFile +" -o " +outPutFile);
+			p.waitFor();
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+		System.out.println(outPutFile + "created");
 	}
 	
 	/**

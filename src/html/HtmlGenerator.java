@@ -177,6 +177,7 @@ private static void genHmtlPages(String fileName, CtExecutable method, ControlFl
 			genHmtlPages(methodID, cfg.getExecutable(), cfg, environment, outputFolder);
 			
 			cfg.writeDotGraph(outputFolder+"/html/dotFolder/", methodID);
+			cfg.writeSvgGraph(outputFolder+"/html/dotFolder/"+methodID+".dot", outputFolder+"/html/dotFolder/"+methodID+".svg");
 		}
 		
 		genHtmlIndex(methodsIndex, outputFolder);
