@@ -27,8 +27,8 @@ private static void genHmtlPages(String fileName, CtExecutable method, ControlFl
 						      "};" +
 						    "</script>";
 		
-		String zoomPanSvg_cfg = "<embed id=\""+fileName.replace(".", "_").replace("$", "_").replace("@", "_")+"\" type=\"image/svg+xml\" src=\"dotFolder/"+fileName+".dot.svg\" width=\"100%\" height=\"600\"/>";
-		String zoomPanSvg_defuse = "<embed id=\""+fileName.replace(".", "_").replace("$", "_").replace("@", "_")+"\" type=\"image/svg+xml\" src=\"defUseFolder/"+fileName+".dot.svg\" width=\"100%\" height=\"250\"/>";
+		String zoomPanSvg_cfg = "<embed id=\""+fileName.replace(".", "_").replace("$", "_").replace("@", "_")+"\" type=\"image/svg+xml\" src=\"dotFolder/"+fileName+".svg\" width=\"100%\" height=\"600\"/>";
+		String zoomPanSvg_defuse = "<embed id=\""+fileName.replace(".", "_").replace("$", "_").replace("@", "_")+"\" type=\"image/svg+xml\" src=\"defUseFolder/"+fileName+".svg\" width=\"100%\" height=\"250\"/>";
 		
 //		String cfg = "<!DOCTYPE html><html><body><img src=\"dotFolder/"+fileName+".dot.svg\"></body></html>";
 //		String defuse = "<!DOCTYPE html><html><body><img src=\"defUseFolder/"+fileName+".dot.svg\"></body></html>";
