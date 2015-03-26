@@ -1,5 +1,7 @@
 package cfg;
 
+import helper.FileHelper;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -88,13 +90,13 @@ public class ControlFlowGraph {
 	 */
 	public void writeDotGraph(String outFolder, String fileName){
 		StringBuffer fileContent = new StringBuffer();
-		fileContent.append("digraph OutputGraph {");
+		fileContent.append("digraph OutputGraph { stylesheet=\"style.css\"");
 		for(BasicBlock node : this.nodes){
 			fileContent.append(node);
 		}
 		fileContent.append("}");
 		
-		writeFile(outFolder,fileName+".dot",fileContent.toString());
+		FileHelper.writeFile(outFolder,fileName+".dot",fileContent.toString());
 		System.out.println("CFG saved in " + outFolder + "/" + fileName);
 	}
 	
@@ -113,7 +115,7 @@ public class ControlFlowGraph {
 			e.printStackTrace();
 		}
         
-		System.out.println(outPutFile + "created");
+		System.out.println(outPutFile + " created");
 	}
 	
 	/**
@@ -135,24 +137,5 @@ public class ControlFlowGraph {
 	 */
 	public BasicBlock getExitBlock(){
 		return graph.getExit();
-	}
-
-	/**
-	 * Write 'content' in 'dir'/'file' 
-	 */
-	public static void writeFile(String dir, String file, String content){ //TODO: move to Helper class
-		try{
-			File newDir = new File(dir);
-			newDir.mkdirs();
-			
-			FileWriter fw = new FileWriter(dir+"/"+file, false);
-			BufferedWriter output = new BufferedWriter(fw);
-			output.write(content);
-			output.flush();
-			output.close();
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
 	}
 }

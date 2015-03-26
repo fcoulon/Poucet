@@ -1,5 +1,7 @@
 package html;
 
+import helper.FileHelper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,6 +11,7 @@ import cfg.BasicBlock;
 import cfg.Connector;
 import cfg.ControlFlowGraph;
 import cfg.MyPrinter;
+import cfg.SVGHelper;
 import spoon.compiler.Environment;
 import spoon.reflect.declaration.CtExecutable;
 import spoon.reflect.declaration.CtMethod;
@@ -94,10 +97,10 @@ private static void genHmtlPages(String fileName, CtExecutable method, ControlFl
 		
 		
 		
-		ControlFlowGraph.writeFile(outputFolder+"/html/", fileName +"_defuse.html", defuse.toString());
-		ControlFlowGraph.writeFile(outputFolder+"/html/", fileName +"_cfg.html", cfg.toString());
-		ControlFlowGraph.writeFile(outputFolder+"/html/", fileName +"_code.html", code.toString());
-		ControlFlowGraph.writeFile(outputFolder+"/html/", fileName +"_main.html", main.toString());
+		FileHelper.writeFile(outputFolder+"/html/", fileName +"_defuse.html", defuse.toString());
+		FileHelper.writeFile(outputFolder+"/html/", fileName +"_cfg.html", cfg.toString());
+		FileHelper.writeFile(outputFolder+"/html/", fileName +"_code.html", code.toString());
+		FileHelper.writeFile(outputFolder+"/html/", fileName +"_main.html", main.toString());
 		
 	}
 	
@@ -155,8 +158,8 @@ private static void genHmtlPages(String fileName, CtExecutable method, ControlFl
 				"</body>" +
 				"</html> ";
 		
-		ControlFlowGraph.writeFile(outputFolder+"/html/", "methodIndex.html", methodIndex.toString());
-		ControlFlowGraph.writeFile(outputFolder, "index.html", index.toString());
+		FileHelper.writeFile(outputFolder+"/html/", "methodIndex.html", methodIndex.toString());
+		FileHelper.writeFile(outputFolder, "index.html", index.toString());
 	}
 	
 	public static void build(List<ControlFlowGraph> cfgs, Environment environment, String outputFolder){
@@ -178,6 +181,9 @@ private static void genHmtlPages(String fileName, CtExecutable method, ControlFl
 			
 			cfg.writeDotGraph(outputFolder+"/html/dotFolder/", methodID);
 			cfg.writeSvgGraph(outputFolder+"/html/dotFolder/"+methodID+".dot", outputFolder+"/html/dotFolder/"+methodID+".svg");
+			
+			SVGHelper.generateFilterFile(outputFolder+"/html/dotFolder");
+			SVGHelper.genererateCssFile(outputFolder+"/html/dotFolder");
 		}
 		
 		genHtmlIndex(methodsIndex, outputFolder);
